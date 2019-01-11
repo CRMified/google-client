@@ -2,12 +2,11 @@ require 'google/apis/admin_directory_v1'
 require 'googleauth'
 require 'googleauth/stores/file_token_store'
 require 'fileutils'
-require 'active_support/time'
 require_relative './concerns/group_utils'
 require_relative './concerns/member_utils'
 require 'pry'
 
-module Groups
+module GoogleClient::Groups
   class Client
     include GoogleGroups::GroupUtils
     include GoogleGroups::MemberUtils
@@ -36,7 +35,7 @@ module Groups
         create_group(group_email, group_name, group_description)
       end
       remove_or_add_members(group_email, member_emails)
-      # update_group_description(group_name)
+      update_group_description(group_name)
     end
 
     private

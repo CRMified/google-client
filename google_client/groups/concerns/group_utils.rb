@@ -26,15 +26,15 @@ module GoogleGroups
       group = find_group(group_email)
       last_updated_time = group.description[/updated at:(.*?)\./m, 1]
       description = if last_updated_time
-        group.description.gsub(last_updated_time, Time.current)
+        group.description.gsub(last_updated_time, Time.now.utc)
       else
-        group.description + " Last updated at #{Time.current}."
+        group.description + " Last updated at #{Time.now.utc}."
       end
       update_group(group_email, group.name, description)
     end
 
     def group_list
-      @group_list ||= @service.list_groups(customer: @client_id).groups
+      @group_list ||= @service.list_groups(customer: @customer_id).groups
     end
   end
 end
