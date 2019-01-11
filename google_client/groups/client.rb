@@ -8,8 +8,8 @@ require 'pry'
 
 module GoogleClient::Groups
   class Client
-    include GoogleGroups::GroupUtils
-    include GoogleGroups::MemberUtils
+    include GoogleClient::GroupUtils
+    include GoogleClient::MemberUtils
 
     OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'.freeze
     APPLICATION_NAME = 'Google Group API Client'.freeze

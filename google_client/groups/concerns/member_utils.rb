@@ -1,4 +1,4 @@
-module GoogleGroups
+module GoogleClient
   module MemberUtils
     def member_list(email)
       @member_list = @service.list_members(email).members || []

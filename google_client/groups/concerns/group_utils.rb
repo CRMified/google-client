@@ -1,10 +1,10 @@
-module GoogleGroups
+module GoogleClient
   module GroupUtils
     def find_group(group_email)
       group_presense = group_list.select do |group|
         group.email == group_email
       end
-      group_presense.first # will return nil from an empty array if there is none with the criteria
+      return group_presense.first # will return nil from an empty array if there is none with the criteria
     end
 
     def create_group(email, name, description)
