@@ -7,9 +7,9 @@ require_relative './concerns/group_utils'
 require_relative './concerns/member_utils'
 require 'pry'
 
-module GoogleGroups
+module Groups
   class Client
-    # include GoogleGroups::GroupUtils
+    include GoogleGroups::GroupUtils
     include GoogleGroups::MemberUtils
 
     OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'.freeze
@@ -19,11 +19,12 @@ module GoogleGroups
              'https://www.googleapis.com/auth/admin.directory.user.alias',
              'https://www.googleapis.com/auth/admin.directory.group',
              'https://www.googleapis.com/auth/admin.directory.group.readonly'].freeze
+    USER_ID = 'default'.freeze
 
-    def initialize(credential_file, token_file, user_id)
+    def initialize(credential_file, token_file, customer_id)
       @credential_file = credential_file
       @token_file = token_file
-      @user_id = user_id
+      @customer_id = customer_id
       authorize
       service
     end
@@ -44,7 +45,7 @@ module GoogleGroups
       client_id = Google::Auth::ClientId.from_file(@credential_file)
       token_store = Google::Auth::Stores::FileTokenStore.new(file: @token_file)
       authorizer = Google::Auth::UserAuthorizer.new(client_id, SCOPE, token_store)
-      credentials = authorizer.get_credentials('default')
+      credentials = authorizer.get_credentials(USER_ID)
       credentials
     end
 
@@ -57,41 +58,6 @@ module GoogleGroups
       service.client_options.application_name = APPLICATION_NAME
       service.authorization = authorize
       service
-    end
-
-    def find_group(group_email)
-      response = @service.list_groups(customer: 'C01h21jpc')
-      group_presense = response.groups.select do |group|
-        group.email == group_email
-      end
-      @group = group_presense.first # will return nil from an empty array if there is none with the criteria
-    end
-
-    def create_group(email, name, description)
-      group = Google::Apis::AdminDirectoryV1::Group
-              .new(name: name,
-                   email: email,
-                   description: description)
-      @service.insert_group(group)
-      @group = find_group(email)
-    end
-
-    def update_group(email, name, description)
-      group = Google::Apis::AdminDirectoryV1::Group
-              .new(name: name,
-                   description: description)
-      @service.update_group(email, group)
-    end
-
-    def update_group_description(group_email)
-      group = find_group(group_email)
-      last_updated_time = group.description[/updated at:(.*?)\./m, 1]
-      description = if last_updated_time
-        group.description.gsub(last_updated_time, Time.current)
-      else
-        group.description + " Last updated at #{Time.current}."
-      end
-      update_group(group_email, group.name, description)
     end
   end
 end

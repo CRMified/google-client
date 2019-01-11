@@ -1,11 +1,10 @@
 module GoogleGroups
   module GroupUtils
     def find_group(group_email)
-      response = @service.list_groups(customer: @client_id)
-      group_presense = response.groups.select do |group|
+      group_presense = group_list.select do |group|
         group.email == group_email
       end
-      @group = group_presense.first # will return nil from an empty array if there is none with the criteria
+      group_presense.first # will return nil from an empty array if there is none with the criteria
     end
 
     def create_group(email, name, description)
@@ -32,6 +31,10 @@ module GoogleGroups
         group.description + " Last updated at #{Time.current}."
       end
       update_group(group_email, group.name, description)
+    end
+
+    def group_list
+      @group_list ||= @service.list_groups(customer: @client_id).groups
     end
   end
 end
