@@ -24,9 +24,9 @@ module GoogleGroups
 
     def update_group_description(group_email)
       group = find_group(group_email)
-      last_updated_time = group.description[/updated at:(.*?)\./m, 1]
+      last_updated_time = group.description[/updated at (.*?)\./m, 1]
       description = if last_updated_time
-        group.description.gsub(last_updated_time, Time.now.utc)
+        group.description.gsub(last_updated_time, Time.now.utc.to_s)
       else
         group.description + " Last updated at #{Time.now.utc}."
       end

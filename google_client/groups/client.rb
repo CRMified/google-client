@@ -35,7 +35,7 @@ module GoogleClient::Groups
         create_group(group_email, group_name, group_description)
       end
       remove_or_add_members(group_email, member_emails)
-      update_group_description(group_name)
+      update_group_description(group_email)
     end
 
     private
