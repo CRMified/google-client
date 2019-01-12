@@ -22,6 +22,8 @@ We need to initialize a google grups client by passing in the following paramete
 - `customer_id`: Client id that get form token file.
 
 ```rb
+require 'google_client'
+
 gcc = GoogleClient::Groups::Client.new(credential_file, token_file, customer_id)
 ```
 
