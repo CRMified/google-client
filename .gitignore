@@ -1,3 +1,4 @@
 credentials.json
 token.yaml
 *.gemspec
+*.gem
