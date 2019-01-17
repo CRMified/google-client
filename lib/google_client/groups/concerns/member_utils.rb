@@ -27,9 +27,9 @@ module GoogleClient
       end
     end
 
-    def remove_members(group_email, emails)
-      emails.each do |email|
-        @service.delete_member(group_email, email)
+    def remove_members(group_email, members)
+      members.each do |member|
+        @service.delete_member(group_email, member.email)
       end
     end
 
