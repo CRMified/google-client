@@ -22,19 +22,35 @@ module GoogleClient
       @service.update_group(email, group)
     end
 
-    def update_group_description(group_email)
-      group = find_group(group_email)
+    def update_group_description(group)
       last_updated_time = group.description[/updated at (.*?)\./m, 1]
       description = if last_updated_time
-        group.description.gsub(last_updated_time, Time.now.utc.to_s)
-      else
-        group.description + " Last updated at #{Time.now.utc}."
-      end
-      update_group(group_email, group.name, description)
+                      group.description.gsub(last_updated_time, Time.now.utc.to_s)
+                    else
+                      group.description + " Last updated at #{Time.now.utc}."
+                    end
+      update_group(group.email, group.name, description)
     end
 
     def group_list
-      @group_list ||= @service.list_groups(customer: @customer_id).groups
+      return @group_list if @group_list
+
+      fetch_group_list
+    end
+
+    def fetch_group_list
+      @group_list = @service.list_groups(customer: @customer_id).groups
+      next_page = @service.list_groups(customer: @customer_id).next_page_token
+      until next_page.nil?
+        @group_list = @group_list.push(@service.list_groups(
+          customer: @customer_id,
+          page_token: next_page
+        ).groups)
+        next_page = @service.list_groups(customer: @customer_id,
+                                         page_token: next_page).next_page_token
+      end
+      @group_list.flatten!
+      @group_list
     end
   end
 end
