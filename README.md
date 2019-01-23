@@ -49,6 +49,6 @@ email       - group email
 name        - group name
 description - group description
 
-- `list_groups`
+- `group_list`
 
 Loads all the groups associated with this client
