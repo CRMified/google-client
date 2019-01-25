@@ -34,6 +34,7 @@ module GoogleClient::Groups
       else
         begin
           create_group(group_email, group_name, group_description)
+          sleep(45)
         rescue Google::Apis::ClientError
           update_group(group_email, group_name, group_description)
         end
