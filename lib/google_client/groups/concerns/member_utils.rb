@@ -34,7 +34,7 @@ module GoogleClient
     end
 
     def remove_or_add_members(group_email, emails)
-      sleep(1)
+      #sleep(1)
       member_list(group_email)
       add_members(group_email, members_to_be_added(emails))
       remove_members(group_email, members_to_be_removed(emails))
