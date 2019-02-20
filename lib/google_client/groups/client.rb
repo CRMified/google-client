@@ -31,6 +31,7 @@ module GoogleClient::Groups
     def upsert(group_email:, group_name:, group_description: nil, member_emails: [])
       group = if find_group(group_email)
         update_group(group_email, group_name, group_description)
+        sleep(45)
       else
         begin
           create_group(group_email, group_name, group_description)
