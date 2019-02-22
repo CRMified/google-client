@@ -38,7 +38,6 @@ module GoogleClient::Groups
                   update_group(group_email, group_name, group_description)
                 end
               end
-      sleep(2)
       remove_or_add_members(group_email, member_emails)
       update_group_description(group)
     end
