@@ -4,20 +4,16 @@ module GoogleClient
       @member_list = @service.list_members(email).members || []
     end
 
-    def members_to_be_removed(emails)
-      @members_to_be_removed ||= @member_list.reject do |member|
+    def members_to_be_removed(group_email, emails)
+      @members_to_be_removed ||= @service.list_members(group_email).members.reject do |member|
         emails.include?(member.email)
       end
     end
 
-    def members_to_be_added(emails)
+    def members_to_be_added(group_email, emails)
       @members_to_be_added ||= emails.reject do |email|
-        member_emails.include?(email)
+        @service.list_members(group_email).members.map(&:email).include?(email)
       end
-    end
-
-    def member_emails
-      @member_emails ||= @member_list.map(&:email)
     end
 
     def add_members(group_email, emails)
@@ -36,8 +32,8 @@ module GoogleClient
     def remove_or_add_members(group_email, emails)
       #sleep(1)
       member_list(group_email)
-      add_members(group_email, members_to_be_added(emails))
-      remove_members(group_email, members_to_be_removed(emails))
+      add_members(group_email, members_to_be_added(group_email, emails))
+      remove_members(group_email, members_to_be_removed(group_email, emails))
     end
   end
 end
