@@ -5,13 +5,13 @@ module GoogleClient
     end
 
     def members_to_be_removed(group_email, emails)
-      @members_to_be_removed ||= @service.list_members(group_email).members.reject do |member|
+      @service.list_members(group_email).members.reject do |member|
         emails.include?(member.email)
       end
     end
 
     def members_to_be_added(group_email, emails)
-      @members_to_be_added ||= emails.reject do |email|
+      emails.reject do |email|
         @service.list_members(group_email).members.map(&:email).include?(email)
       end
     end
