@@ -24,6 +24,12 @@ module GoogleClient
       end
     end
 
+
+    # swarna.saravanan@trailblazercgl.com
+    # swarnalatha.saravanan@trailblazercgl.com
+
+
+
     def add_members(group_email, emails)
       emails.each do |email|
         member = Google::Apis::AdminDirectoryV1::Member.new(email: email)
@@ -39,8 +45,8 @@ module GoogleClient
 
     def remove_or_add_members(group_email, emails)
       member_list(group_email)
-      add_members(group_email, members_to_be_added(group_email, emails))
       remove_members(group_email, members_to_be_removed(group_email, emails))
+      add_members(group_email, members_to_be_added(group_email, emails))
     end
   end
 end
