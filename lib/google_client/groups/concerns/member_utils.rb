@@ -5,8 +5,12 @@ module GoogleClient
     end
 
     def members_to_be_removed(group_email, emails)
-      @service.list_members(group_email).members.reject do |member|
-        emails.include?(member.email)
+      if @service.list_members(group_email).members.nil?
+        []
+      else
+        @service.list_members(group_email).members.reject do |member|
+          emails.include?(member.email)
+        end
       end
     end
 
